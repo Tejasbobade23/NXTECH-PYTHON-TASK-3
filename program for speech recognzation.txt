@@ -1,0 +1,37 @@
+import speech_recognition as sr
+import pyttsx3
+
+def listen():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        recognizer.pause_threshold = 1
+        audio = recognizer.listen(source)
+    try:
+        print("Recognizing...")
+        query = recognizer.recognize_google(audio, language='en')
+        print(f"User: {query}")
+        return query
+    except Exception as e:
+        print("Could not understand audio.")
+        return ""
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+def process(query):
+    if "hello" in query:
+        speak("Hello! How can I help you?")
+    elif "bye" in query:
+        speak("Goodbye!")
+        exit()
+    else:
+        speak("I'm sorry. I can only respond to hello and goodbye.")
+
+if __name__ == "__main__":
+    speak("Welcome to the speech assistant app!")
+    while True:
+        query = listen().lower()
+        process(query)
